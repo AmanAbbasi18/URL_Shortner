@@ -13,16 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
-        image: postgres:16
+      mysql:
+        image: mysql:8.0
         env:
-          POSTGRES_DB: snipp_test
-          POSTGRES_USER: snipp
-          POSTGRES_PASSWORD: snipp
+          MYSQL_DATABASE: snipp_test
+          MYSQL_USER: snipp
+          MYSQL_PASSWORD: snipp
+          MYSQL_ROOT_PASSWORD: snipp_root_password
         ports:
-          - 5432:5432
+          - 3306:3306
         options: >-
-          --health-cmd "pg_isready -U snipp"
+          --health-cmd "mysqladmin ping -h localhost -u snipp -psnipp"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -37,7 +38,7 @@ jobs:
           --health-retries 10
 
     env:
-      DATABASE_URL: jdbc:postgresql://localhost:5432/snipp_test
+      DATABASE_URL: jdbc:mysql://localhost:3306/snipp_test
       SPRING_DATASOURCE_USERNAME: snipp
       SPRING_DATASOURCE_PASSWORD: snipp
       # Test-only signing key; must be at least 32 bytes for HS256

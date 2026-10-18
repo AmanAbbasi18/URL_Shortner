@@ -6,7 +6,6 @@ import com.yato.urlShortenerb.service.UrlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,10 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/urls")
-@RequiredArgsConstructor
 public class UrlController {
 
     private final UrlService urlService;
+
+    public UrlController(UrlService urlService) {
+        this.urlService = urlService;
+    }
 
 
     private String currentUserEmail(){

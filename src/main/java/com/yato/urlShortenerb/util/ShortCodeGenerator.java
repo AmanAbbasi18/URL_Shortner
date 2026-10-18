@@ -1,10 +1,9 @@
 package com.yato.urlShortenerb.util;
 
-import lombok.NoArgsConstructor;
 
 import java.security.SecureRandom;
-@NoArgsConstructor
 public final class ShortCodeGenerator {
+    private ShortCodeGenerator() {}
     private static final String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final SecureRandom RANDOM=new SecureRandom();
     private static final int DEFAULT_LENGTH=7;

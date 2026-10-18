@@ -6,7 +6,6 @@ import com.yato.urlShortenerb.service.AnalyticsService;
 import com.yato.urlShortenerb.util.UrlValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +16,15 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 public class RedirectController {
 
     private final RedirectCache redirectCache;
     private final AnalyticsService analyticsService;
+
+    public RedirectController(RedirectCache redirectCache, AnalyticsService analyticsService) {
+        this.redirectCache = redirectCache;
+        this.analyticsService = analyticsService;
+    }
 
     @Operation(summary = "Redirect short code to original URL")
     @GetMapping("/s/{shortCode}")

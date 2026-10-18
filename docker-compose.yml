@@ -1,20 +1,21 @@
-# The whole stack: Postgres, the Spring Boot API and the web frontend.
+# The whole stack: MySQL, the Spring Boot API and the web frontend.
 #   cp .env.example .env   # set APP_JWT_SECRET
 #   docker compose up --build
 # Then open http://localhost:3000
 services:
   db:
-    image: postgres:16
+    image: mysql:8.0
     environment:
-      POSTGRES_DB: snipp
-      POSTGRES_USER: snipp
-      POSTGRES_PASSWORD: snipp
+      MYSQL_DATABASE: snipp
+      MYSQL_USER: snipp
+      MYSQL_PASSWORD: snipp
+      MYSQL_ROOT_PASSWORD: snipp_root_password
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U snipp"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "snipp", "-psnipp"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -27,7 +28,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DATABASE_URL: jdbc:postgresql://db:5432/snipp
+      DATABASE_URL: jdbc:mysql://db:3306/snipp
       SPRING_DATASOURCE_USERNAME: snipp
       SPRING_DATASOURCE_PASSWORD: snipp
       APP_JWT_SECRET: ${APP_JWT_SECRET:?Set APP_JWT_SECRET in .env (at least 32 characters)}

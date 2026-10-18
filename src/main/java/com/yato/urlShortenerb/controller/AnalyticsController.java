@@ -2,7 +2,6 @@ package com.yato.urlShortenerb.controller;
 
 import com.yato.urlShortenerb.service.AnalyticsService;
 import com.yato.urlShortenerb.util.LogMasker;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,10 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequestMapping("/analytics")
-@RequiredArgsConstructor
 public class AnalyticsController {
 
     private final AnalyticsService analyticsService;
+
+    public AnalyticsController(AnalyticsService analyticsService) {
+        this.analyticsService = analyticsService;
+    }
 
     @GetMapping("/overview")
     public ResponseEntity<?> getAnalytics() {

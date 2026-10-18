@@ -1,7 +1,6 @@
 package com.yato.urlShortenerb.cache;
 
 import com.yato.urlShortenerb.repo.UrlRepo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,13 +13,17 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * Entries are evicted whenever a link is updated or deleted.
  */
 @Component
-@RequiredArgsConstructor
 public class RedirectCache {
 
     public static final String CACHE_NAME = "redirects";
 
     private final UrlRepo urlRepo;
     private final CacheManager cacheManager;
+
+    public RedirectCache(UrlRepo urlRepo, CacheManager cacheManager) {
+        this.urlRepo = urlRepo;
+        this.cacheManager = cacheManager;
+    }
 
     // Unknown codes are not cached, so random lookups can't fill the cache
     @Cacheable(cacheNames = CACHE_NAME, key = "#shortCode", unless = "#result == null")

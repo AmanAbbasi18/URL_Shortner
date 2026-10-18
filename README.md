@@ -2,7 +2,7 @@
 
 A URL shortener with user accounts, per-link expiry and click analytics: a Spring Boot REST API and a React web app.
 
-- **Backend** (repo root): Spring Boot 4 (Java 21), PostgreSQL, Flyway, JWT authentication
+- **Backend** (repo root): Spring Boot 4 (Java 21), MySQL, Flyway, JWT authentication
 - **Frontend** ([`frontend/`](frontend)): React, TypeScript and Vite
 
 | Links | Stats |
@@ -38,18 +38,18 @@ The stack is three containers:
 |---|---|---|
 | `web` | 3000 | The React app, served by nginx, which also forwards API and short-link paths to `app` |
 | `app` | 8080 | The Spring Boot API (also reachable directly: http://localhost:8080/swagger-ui.html) |
-| `db` | 5432 | PostgreSQL 16 |
+| `db` | 3306 | MySQL 8.0 |
 
 ## Running without Docker
 
-Requirements: Java 21 and PostgreSQL 12+.
+Requirements: Java 21 and MySQL 8.0+.
 
 ```bash
-createdb snipp
+mysql -u root -p -e "CREATE DATABASE snipp;"
 
-export DATABASE_URL=jdbc:postgresql://localhost:5432/snipp
-export SPRING_DATASOURCE_USERNAME=postgres
-export SPRING_DATASOURCE_PASSWORD=postgres
+export DATABASE_URL=jdbc:mysql://localhost:3306/snipp
+export SPRING_DATASOURCE_USERNAME=snipp
+export SPRING_DATASOURCE_PASSWORD=snipp
 export APP_JWT_SECRET="$(openssl rand -base64 48)"
 
 ./mvnw spring-boot:run
@@ -73,7 +73,7 @@ All configuration is done with environment variables.
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `DATABASE_URL` | yes | | JDBC URL, e.g. `jdbc:postgresql://host:5432/db`. The `postgres://` form some hosts show is not accepted. |
+| `DATABASE_URL` | yes | | JDBC URL, e.g. `jdbc:mysql://host:3306/db`. |
 | `SPRING_DATASOURCE_USERNAME` | yes | | Database user |
 | `SPRING_DATASOURCE_PASSWORD` | yes | | Database password |
 | `APP_JWT_SECRET` | yes | | JWT signing key, **at least 32 characters**. The app refuses to start otherwise. |
@@ -100,12 +100,12 @@ The schema lives in `src/main/resources/db/migration` and is applied by Flyway a
 
 ## Tests
 
-The tests run against a real PostgreSQL database:
+The tests run against a real MySQL database:
 
 ```bash
-export DATABASE_URL=jdbc:postgresql://localhost:5432/snipp_test
-export SPRING_DATASOURCE_USERNAME=postgres
-export SPRING_DATASOURCE_PASSWORD=postgres
+export DATABASE_URL=jdbc:mysql://localhost:3306/snipp_test
+export SPRING_DATASOURCE_USERNAME=snipp
+export SPRING_DATASOURCE_PASSWORD=snipp
 export APP_JWT_SECRET=test-secret-0123456789abcdef0123456789
 
 ./mvnw verify
@@ -113,7 +113,7 @@ export APP_JWT_SECRET=test-secret-0123456789abcdef0123456789
 
 `RedisIntegrationTests` also runs when `REDIS_URL` is set (e.g. `REDIS_URL=redis://localhost:6379`).
 
-CI (`.github/workflows/ci.yml`) runs the same on every pull request against Postgres and Redis service containers, then builds the backend Docker image and smoke-tests it.
+CI (`.github/workflows/ci.yml`) runs the same on every pull request against MySQL and Redis service containers, then builds the backend Docker image and smoke-tests it.
 
 Frontend unit tests and type checks:
 

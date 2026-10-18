@@ -12,7 +12,6 @@ import com.yato.urlShortenerb.service.UrlService;
 import com.yato.urlShortenerb.util.LogMasker;
 import com.yato.urlShortenerb.util.ShortCodeGenerator;
 import com.yato.urlShortenerb.util.UrlValidator;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,13 +31,19 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class UrlServiceImpl implements UrlService {
 
     private final UrlRepo urlRepo;
     private final UserRepo userRepo;
     private final AnalyticsEventRepo analyticsRepo;
     private final RedirectCache redirectCache;
+
+    public UrlServiceImpl(UrlRepo urlRepo, UserRepo userRepo, AnalyticsEventRepo analyticsRepo, RedirectCache redirectCache) {
+        this.urlRepo = urlRepo;
+        this.userRepo = userRepo;
+        this.analyticsRepo = analyticsRepo;
+        this.redirectCache = redirectCache;
+    }
 
     private static final int DEFAULT_PAGE_SIZE = 20;
     private static final int MAX_PAGE_SIZE = 100;

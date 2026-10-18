@@ -9,7 +9,6 @@ import com.yato.urlShortenerb.repo.UrlRepo;
 import com.yato.urlShortenerb.repo.UserRepo;
 import com.yato.urlShortenerb.service.AnalyticsService;
 import com.yato.urlShortenerb.util.DeviceClassifier;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,12 +20,17 @@ import java.util.*;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class AnalyticsServiceImpl implements AnalyticsService {
 
     private final UserRepo userRepo;
     private final UrlRepo urlRepo;
     private final AnalyticsEventRepo analyticsRepo;
+
+    public AnalyticsServiceImpl(UserRepo userRepo, UrlRepo urlRepo, AnalyticsEventRepo analyticsRepo) {
+        this.userRepo = userRepo;
+        this.urlRepo = urlRepo;
+        this.analyticsRepo = analyticsRepo;
+    }
 
     // Bounds what a client can make us store per click
     private static final int MAX_HEADER_LENGTH = 1024;

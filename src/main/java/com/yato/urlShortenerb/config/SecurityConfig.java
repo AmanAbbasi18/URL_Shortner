@@ -1,6 +1,5 @@
 package com.yato.urlShortenerb.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +14,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.List;
 
 @Configuration
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
     // Comma-separated list, set with APP_CORS_ALLOWED_ORIGINS
     @Value("${app.cors.allowed-origins}")

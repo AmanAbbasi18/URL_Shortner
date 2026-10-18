@@ -8,7 +8,6 @@ import com.yato.urlShortenerb.entity.User;
 import com.yato.urlShortenerb.repo.UserRepo;
 import com.yato.urlShortenerb.service.UserService;
 import com.yato.urlShortenerb.util.LogMasker;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,12 +15,17 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepo repo;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JWTUtils jwtUtils;
+
+    public UserServiceImpl(UserRepo repo, BCryptPasswordEncoder passwordEncoder, JWTUtils jwtUtils) {
+        this.repo = repo;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtils = jwtUtils;
+    }
 
     @Override
     public ResponseEntity<?> register(RegisterRequest request) {
